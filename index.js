@@ -31,13 +31,32 @@ async function showList(elem,url){
   
   
 }
-function filler(list,candidates){
-  
-  for (let i = 0; i < candidates.length; i++) {
-    
-    const li = document.createElement('li');
-    li.textContent = candidates[i];
-    list.append(li);
+async function startShowingMessage(elem,url){
+  setInterval(async () => {
+    const response = await fetch(url);
+    const content = await response.text();
+    elem.textContent = content;
+  }, 1000);
+}
+
+async function handleError(elem,url){
+  const response = await fetch(url);
+  if (response.ok){
+    const content = await response.text();
+    elem.textContent = content;
   }
-  return list;
+  else{
+    elem.textContent = 'OH DEAR'
+  }
+}
+
+function drawBox(canvas,url){
+  setInterval(async() => {
+    const response = await fetch(url);
+    const content = await response.json();
+    console.log(content);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillRect(content.x,content.y,10,10);
+  }, 1000);
 }
